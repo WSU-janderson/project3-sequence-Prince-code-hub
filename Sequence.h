@@ -1,4 +1,7 @@
 
+using namespace std;
+#include<string>
+
 class SequenceNode {
 public: // to make it easier, we can make the data members public so we don't need
     // getters and setters
@@ -23,19 +26,25 @@ class Sequence{
     SequenceNode* head;
     SequenceNode* tail;
     size_t numElts;
-    Sequence() : head(nullptr), tail(nullptr), numElts(0){
-    }
+    // Sequence() : head(nullptr), tail(nullptr), numElts(0){
+    // // }
 
 
 
 // Creates an empty sequence (numElts == 0) or a sequence of numElts items
  // indexed from 0 ... (numElts - 1).
-Sequence(size_t sz = 0){}
- // Creates a (deep) copy of sequence s
- Sequence(const Sequence& s){}
- // Destroys all items in the sequence and release the memory
+Sequence(size_t sz = 0);
+
+    // Creates a (deep) copy of sequence s
+ Sequence(const Sequence& s);
+
+    void addNode(string item);
+
+    void clearlist();
+
+    // Destroys all items in the sequence and release the memory
  // associated with the sequence
- ~Sequence(){}
+ ~Sequence();
  // The current sequence is released and replaced by a (deep) copy of sequence
  // s. A reference to the copied sequence is returned (return *this;).
  Sequence& operator=(const Sequence& s){}
@@ -45,7 +54,7 @@ Sequence(size_t sz = 0){}
  // of the sequence
  std::string& operator[](size_t position){}
  // The value of item is append to the sequence.
- void push_back(std::string item){}
+ void push_back(std::string item);
  // The item at the end of the sequence is deleted and size of the sequence is
  // reduced by one. If sequence was empty, throws an exception
  void pop_back(){}
@@ -53,7 +62,7 @@ Sequence(size_t sz = 0){}
  // value of item is inserted at position and the size of sequence is increased
  // by one. Throws an exceptionif the position is outside the bounds of the
  // sequence
- void insert(size_t position, std::string item){}
+ void insert(size_t position, std::string item);
  // Returns the first element in the sequence. If the sequence is empty, throw an
  // exception.
  std::string front() const{}
@@ -78,6 +87,6 @@ Sequence(size_t sz = 0){}
  // Outputs all elements (ex: <4, 8, 15, 16, 23, 42>) as a string to the output
  // stream. This is *not* a method of the Sequence class, but instead it is a
  // friend function
- // friend ostream& operator<<(ostream& os, const Sequence& s)
+ friend ostream& operator<<(ostream& os, const Sequence& s);
 };
 
