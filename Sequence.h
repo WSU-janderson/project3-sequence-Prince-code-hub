@@ -1,7 +1,17 @@
-using namespace std;
+//Sequence.h
+// Name: Prince Patel
+// Course: CS 3100
+// Project: Sequence
+//
+// Description:
+//   This file defines the Sequence class. It has basic
+//   operations like insert, push_back, pop_back, erase.
+//   It also includes destruction and deep copy methods.
+
+
 #include<string>
 #include<exception>
-
+using namespace std;
 
 class SequenceNode {
 public: // to make it easier, we can make the data members public so we don't need

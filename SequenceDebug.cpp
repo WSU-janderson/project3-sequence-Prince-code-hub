@@ -31,7 +31,7 @@ int main() {
 
         cout << endl;
 
-        seq.erase(0, 7);
+        seq.erase(0, 2);
         cout << seq.size() << endl;
         cout << seq.front();
         cout << seq.back();
@@ -39,20 +39,20 @@ int main() {
         cout << seq << endl;
 
         // seq.erase(1, 2);
-        // cout << seq.size() << endl;
-        // seq.insert(-1, "num1");
-        // cout << seq.size() << endl;
-        // cout << seq << endl;
+        cout << seq.size() << endl;
+        seq.insert(0, "num1");
+        cout << seq.size() << endl;
+        cout << seq << endl;
 
 
-        // seq.insert(8, "num1");
+        seq.insert(4, "num1");
 
-        // cout << seq << endl;
-        //
-        // cout << seq.front();
-        //
-        // cout << seq.back();
-        // cout << seq.empty();
+        cout << seq << endl;
+
+        cout << seq.front();
+
+        cout << seq.back();
+        cout << seq.empty();
 
     }
     catch (const exception &e) {
