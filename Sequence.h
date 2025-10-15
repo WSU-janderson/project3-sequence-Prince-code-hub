@@ -1,5 +1,7 @@
 using namespace std;
 #include<string>
+#include<exception>
+
 
 class SequenceNode {
 public: // to make it easier, we can make the data members public so we don't need
@@ -94,4 +96,6 @@ public:
     // stream. This is *not* a method of the Sequence class, but instead it is a
     // friend function
     friend ostream &operator<<(ostream &os, const Sequence &s);
+
 };
+

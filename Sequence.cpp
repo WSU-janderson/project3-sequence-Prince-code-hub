@@ -30,7 +30,7 @@ Sequence::Sequence(size_t sz) {
     }
 }
 
-Sequence::Sequence(const Sequence &s) : numElts(s.numElts), head(s.head), tail(s.head) {
+Sequence::Sequence(const Sequence &s) {
     SequenceNode *current = s.head;
 
     while (current) {
@@ -41,6 +41,16 @@ Sequence::Sequence(const Sequence &s) : numElts(s.numElts), head(s.head), tail(s
 
 
 std::string &Sequence::operator[](size_t position) {
+    if (position >= numElts) {
+        throw runtime_error("Out of range");
+    }
+    SequenceNode *current = head;
+    size_t count = 0;
+    while (count < position) {
+        current = current->next;
+        count++;
+    }
+    return current->item;
 }
 
 
@@ -51,7 +61,6 @@ void Sequence::clear() {
         delete current;
         current = temp;
     }
-
     tail = nullptr;
     numElts = 0;
     head = nullptr;
@@ -59,43 +68,73 @@ void Sequence::clear() {
 
 void Sequence::erase(size_t position) {
     SequenceNode *current = head;
-    if (current == nullptr) {
-        return;
-    }else {
-        size_t count = 0;
-        while (count < position) {
-            current = current->next;
-            count++;
-        }
-        current -> prev -> next = current-> next;
-        current -> prev -> prev = current ->prev;
-        delete current;
+
+    if (position >= numElts) {
+        throw runtime_error("Out of range");
     }
+    if (position == 0 && numElts == 1) {
+        delete current;
+        head = nullptr;
+        tail = nullptr;
+        numElts = 0;
+        return;
+    }
+
+    size_t count = 0;
+    while (count < position) {
+        current = current->next;
+        count++;
+    }
+    if (current == head) {
+        head = current->next;
+        head->prev = nullptr;
+    } else if (current == tail) {
+        tail = current->prev;
+        tail->next = nullptr;
+    } else {
+        current->prev->next = current->next;
+        current->next->prev = current->prev;
+    }
+    delete current;
     numElts--;
 }
 
 void Sequence::erase(size_t position, size_t count) {
+    if (position + count > numElts) {
+        throw runtime_error("Out of range");
+    }
     SequenceNode *current = head;
     if (current == nullptr) {
         return;
-    }else{
-        size_t length = 0;
-        while (length < position) {
-            current = current->next;
-            length++;
-        }
-        while (count != 0) {
-            SequenceNode *temp = current;
-            current = current->next;
-            temp -> prev -> next = temp-> next;
-            temp -> next -> prev = temp ->prev;
-            delete temp;
-            count--;
-            numElts--;
-        }
-
+    }
+    size_t length = 0;
+    while (length < position) {
+        current = current->next;
+        length++;
     }
 
+    while (current != nullptr && count > 0) {
+        SequenceNode *toDelete = current;
+        current = current->next;
+
+        if (toDelete->prev != nullptr) {
+            toDelete->prev->next = toDelete->next;
+        }else {
+            head = toDelete->next;
+        }
+        if (toDelete->next != nullptr) {
+            toDelete-> next -> prev = toDelete->prev;
+        }else {
+            tail = toDelete->prev;
+        }
+        delete toDelete;
+        count--;
+        numElts--;
+    }
+    if (numElts == 0) {
+        head = nullptr;
+        tail = nullptr;
+    }
 }
 
 
@@ -103,26 +142,18 @@ Sequence::~Sequence() {
     clear();
 }
 
-Sequence & Sequence::operator=(const Sequence &s) {
-
-  clear();
+Sequence &Sequence::operator=(const Sequence &s) {
+    clear();
 
     SequenceNode *current = s.head;
-    while (current != nullptr) {
-        SequenceNode *temp = current;
+    while (current) {
+        push_back(current->item);
         current = current->next;
-        delete temp;
     }
-
-    head = tail = nullptr;
-    numElts = 0;
-
-
     return *this;
-
 }
-void Sequence::push_back(std::string item) {
 
+void Sequence::push_back(std::string item) {
     SequenceNode *newNode = new SequenceNode;
     newNode->item = item;
     newNode->next = nullptr;
@@ -138,14 +169,16 @@ void Sequence::push_back(std::string item) {
 }
 
 void Sequence::pop_back() {
-    SequenceNode *current = tail;
-
+    if (head == nullptr) {
+        throw runtime_error("Out of range");
+    }
     if (numElts == 1) {
         delete head;
         head = nullptr;
         tail = nullptr;
-    }else if(current->next == nullptr) {
-        tail = tail -> prev;
+    } else{
+        SequenceNode *current = tail;
+        tail = tail->prev;
         tail->next = nullptr;
         delete current;
     }
@@ -153,7 +186,6 @@ void Sequence::pop_back() {
 }
 
 void Sequence::insert(size_t position, std::string item) {
-
     SequenceNode *newNode = new SequenceNode;
     newNode->item = item;
     newNode->next = nullptr;
@@ -161,22 +193,23 @@ void Sequence::insert(size_t position, std::string item) {
 
     if (head == nullptr) {
         head = tail = newNode;
-    }else if (position == 0) {
+    } else if (position == 0) {
         newNode->next = head;
         head->prev = newNode;
         head = newNode;
-    }else if (position >= numElts) {
+    } else if (position > numElts) {
+        throw exception();
+    } else if (position == numElts) {
         newNode->prev = tail;
         tail->next = newNode;
         tail = newNode;
-    }else {
+    } else {
         SequenceNode *current = head;
         size_t count = 0;
         while (count < position - 1) {
             current = current->next;
             count++;
         }
-
         newNode->next = current->next;
         newNode->prev = current;
         current->next->prev = newNode;
@@ -189,49 +222,41 @@ std::string Sequence::front() const {
     SequenceNode *current = head;
 
     if (current == nullptr) {
-        return "Empty List";
-    }else {
-        return current->item;
+        throw runtime_error("Empty Sequence");
     }
+        return current->item;
 }
 
 std::string Sequence::back() const {
     SequenceNode *current = tail;
     if (current == nullptr) {
-        return "Tail Empty";
-    }else {
+        throw runtime_error("Empty Sequence");
+    }
         return current->item;
     }
-}
+
 
 bool Sequence::empty() const {
     SequenceNode *current = head;
     if (current == nullptr) {
         return true;
-    }else {
-        return false;
     }
+    return false;
 }
 
 size_t Sequence::size() const {
     return numElts;
 }
 
-ostream & operator<<(ostream &os, const Sequence &s) {
-
+ostream &operator<<(ostream &os, const Sequence &s) {
     SequenceNode *current = s.head;
     size_t count = 0;
-
-    if (current == nullptr) {
-        os << "Empty sequence";
-        return os;
-    }
     while (current != nullptr) {
-        os << "[" ;
+        os << "[";
         os << current->item;
+        os << "]";
         current = current->next;
         count++;
     }
     return os;
-
 }

@@ -1,5 +1,5 @@
 /**
- * SequenceDebug.cpp
+* SequenceDebug.cpp
  * Project 3
  * CS 3100
  *
@@ -11,23 +11,6 @@
 #include "Sequence.h"
 #include <iostream>
 
-void testCopy();
-
-void addSomeGrades(Sequence nod);
-
-void addSomeGrades(Sequence nod) {
-    nod.push_back("p");
-    nod.push_back("a");
-    nod.push_back("b");
-
-    cout << "in addSomeGrades(nod)" << endl;
-    cout << nod << endl;
-    cout << endl;
-}
-
-void testAddGrade();
-
-
 using namespace std;
 
 int main() {
@@ -35,59 +18,46 @@ int main() {
 
 
     Sequence seq;
-    seq.push_back("p");
-    seq.insert(0, "num5");
-    seq.push_back("num6");
-    seq.push_back("num7");
-    seq.push_back("num8");
+    try {
+        seq.push_back("p");
+        seq.insert(0, "num5");
+        seq.push_back("num6");
+        seq.push_back("num7");
+        seq.push_back("num8");
 
 
-    cout << seq << endl;
+        cout << seq << endl;
+        cout << seq.size() << endl;
 
-    cout << endl;
+        cout << endl;
 
-    seq.erase(1, 2);
+        seq.erase(0, 7);
+        cout << seq.size() << endl;
+        cout << seq.front();
+        cout << seq.back();
+
+        cout << seq << endl;
+
+        // seq.erase(1, 2);
+        // cout << seq.size() << endl;
+        // seq.insert(-1, "num1");
+        // cout << seq.size() << endl;
+        // cout << seq << endl;
 
 
-    cout << seq << endl;
+        // seq.insert(8, "num1");
 
-    cout << seq.front();
+        // cout << seq << endl;
+        //
+        // cout << seq.front();
+        //
+        // cout << seq.back();
+        // cout << seq.empty();
 
-    cout << seq.back();
-    cout << seq.empty();
-    cout << seq.size() << endl;
-
+    }
+    catch (const exception &e) {
+        cout << "Exception:- "<< e.what() << endl;
+    }
 
     return 0;
-}
-
-void testAddGrade() {
-    Sequence seq1(1);
-    cout << "In testADDGRADE" << endl;
-    cout << endl;
-
-    seq1.push_back("some");
-    seq1.insert(2, "num");
-
-    cout << seq1 << endl;
-
-    cout << "In testADDGRADE" << endl;
-    cout << endl;
-}
-
-void testCopy() {
-    Sequence testCopy(1);
-
-    testCopy.push_back("prince");
-    testCopy.push_back("1");
-
-    cout << "In testCopy" << endl;
-    cout << testCopy << endl;
-    cout << endl;
-
-    addSomeGrades(testCopy);
-
-    cout << "In testCopy" << endl;
-    cout << testCopy << endl;
-    cout << endl;
 }
